@@ -20,11 +20,11 @@ class Extractor:
     def start(self):
         self.__create_tmp_dirs()
         self.uncompress_jar()
+        self.decode_class()
 
 # 创建相应tmp目录存储生成的缓存文件
     def __create_tmp_dirs(self):
         print (TAG.join('create tmp dirs in'))
-        global JAR_PATH, CLASS_DIR, JAD_DIR
         file_name = os.path.basename(self.jar_path)
         jar_name = os.path.splitext(file_name)[0]
         tmp_path = os.path.join(self.tool_path, jar_name + '_tmp')
@@ -38,10 +38,10 @@ class Extractor:
 
 # 解压Jar包
     def uncompress_jar(self):
-        os.chdir(self.class_path)
+        os.chdir(self.class_dir)
         os.system('jar xf ' + self.jar_path)
 
-# 利用ja# d工具反编译class文件
+# 利用jad工具反编译class文件
     def decode_class(self):
         shutil.copy(os.path.join(self.tool_path, 'jad'), self.jad_dir)
         os.chdir(self.jad_dir)
