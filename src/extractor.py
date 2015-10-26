@@ -5,9 +5,7 @@ import os
 import sys
 import string
 import shutil
-
-# output__ = {}
-# android_modules__ = {}
+from src.method_extractor import MethodExtractor
 
 TAG = "[Extractor] "
 
@@ -79,27 +77,6 @@ class Extractor:
             print ('<%s>' % (file_name))
             print (module_list)
             print ('')
-            # for module in module_list:
-                # print ('  >> %s' % (module))
-
-# # 提取解析使用了哪些android模块
-# def extract_android_module():
-    # print ('\n********** EXTRACT ANDROID MODULE **********\n')
-    # list_files = os.walk(JAD_DIR)
-    # global android_modules__
-    # for root, dirs, files in list_files:
-        # for f in files:
-            # for line in open(os.path.join(root, f)):
-                # line = line.strip('\n')
-                # head = string.strip(line, ' ')[0:6]
-                # if head == 'import':
-                    # package = string.splitfields(line.strip(';'), ' ')[1]
-                    # if 'android' in package:
-                        # module = string.splitfields(package, '.')[-1]
-                        # if module != '*':
-                            # file_list = android_modules__.get(module) or []
-                            # file_list.append(os.path.join(root, f))
-                            # android_modules__[module] = file_list
 
 # def check_module(line, module):
     # chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
