@@ -21,6 +21,8 @@ class Extractor:
         self.__create_tmp_dirs()
         self.uncompress_jar()
         self.decode_class()
+        self.extract_android_module()
+        self.print_modules()
 
 # 创建相应tmp目录存储生成的缓存文件
     def __create_tmp_dirs(self):
@@ -49,8 +51,36 @@ class Extractor:
         for root, dirs, files in list_files:
             for f in files:
                 if os.path.splitext(f)[1] == '.class':
-                    cmd = './jad -o -r ' + os.path.join(root, f)
+                    cmd = './jad -o -r -s java ' + os.path.join(root, f)
                     os.popen(cmd)
+
+    def extract_android_module(self):
+        list_files = os.walk(self.jad_dir)
+        self.android_modules = dict()
+        for root, dirs, files in list_files:
+            for f in files:
+                for line in open(os.path.join(root, f)):
+                    line = line.strip('\n')
+                    head = string.strip(line, ' ')[0:6]
+                    if head == 'import':
+                        package = string.splitfields(line.strip(';'), ' ')[1]
+                        if 'android' in package:
+                            module = string.splitfields(package, '.')[-1]
+                            if module != '*':
+                                file_key = os.path.join(root, f)
+                                module_list = self.android_modules.get(file_key) or []
+                                module_list.append(module)
+                                self.android_modules[file_key] = module_list
+        return self.android_modules
+
+    def print_modules(self):
+        print ('\n***************** MODULE OUTPUT *****************')
+        for file_name, module_list in self.android_modules.items():
+            print ('<%s>' % (file_name))
+            print (module_list)
+            print ('')
+            # for module in module_list:
+                # print ('  >> %s' % (module))
 
 # # 提取解析使用了哪些android模块
 # def extract_android_module():
