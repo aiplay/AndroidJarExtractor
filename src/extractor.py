@@ -20,7 +20,8 @@ class Extractor:
         self.uncompress_jar()
         self.decode_class()
         self.extract_android_module()
-        self.print_modules()
+        # self.print_modules()
+        self.extract_method()
 
 # 创建相应tmp目录存储生成的缓存文件
     def __create_tmp_dirs(self):
@@ -70,6 +71,14 @@ class Extractor:
                                 module_list.append(module)
                                 self.android_modules[file_key] = module_list
         return self.android_modules
+
+    def extract_method(self):
+        list_files = os.walk(self.jad_dir)
+        for root, dirs, files in list_files:
+            for f in files:
+                if f == 'b.java':
+                    method_extractor = MethodExtractor(os.path.join(root, f))
+                    method_extractor.extract()
 
     def print_modules(self):
         print ('\n***************** MODULE OUTPUT *****************')
