@@ -21,11 +21,14 @@ class Extractor:
         self.__create_tmp_dirs()
         self.uncompress_jar()
         self.decode_class()
+        self.extract()
+        self.generate_output()
+
+    def extract(self):
         self.extract_android_module()
-        # self.print_modules()
+        self.print_modules()
         self.extract_method()
         self.extract_invoke()
-        self.generate_output()
 
     # 创建相应tmp目录存储生成的缓存文件
     def __create_tmp_dirs(self):
@@ -121,3 +124,4 @@ class Extractor:
                         output_file.write('        %s\n' % (line))
                     for line in invoke_extractor.obj_invoke_list:
                         output_file.write('        %s\n' % (line))
+        output_file.close()
