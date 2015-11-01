@@ -19,10 +19,11 @@ class Extractor:
     # 启动解析
     def start(self):
         self.__create_tmp_dirs()
-        self.uncompress_jar()
-        self.decode_class()
-        self.extract()
-        self.generate_output()
+        self.read_ignore_config()
+        #  self.uncompress_jar()
+        #  self.decode_class()
+        #  self.extract()
+        #  self.generate_output()
 
     def extract(self):
         self.extract_android_module()
@@ -125,3 +126,10 @@ class Extractor:
                     for line in invoke_extractor.obj_invoke_list:
                         output_file.write('        %s\n' % (line))
         output_file.close()
+
+    def read_ignore_config(self):
+        config_path = os.path.join(self.tool_path, 'ignore.cfg')
+        for line in open(config_path):
+            if line:
+                print line
+        pass
