@@ -15,15 +15,16 @@ class Extractor:
     def __init__(self, jar_path):
         self.jar_path = jar_path
         self.tool_path = os.getcwd()
+        self.ignore_list = list()
 
     # 启动解析
     def start(self):
-        self.__create_tmp_dirs()
+        self.create_tmp_dirs()
         self.read_ignore_config()
-        #  self.uncompress_jar()
-        #  self.decode_class()
-        #  self.extract()
-        #  self.generate_output()
+        self.uncompress_jar()
+        self.decode_class()
+        self.extract()
+        self.generate_output()
 
     def extract(self):
         self.extract_android_module()
@@ -32,7 +33,7 @@ class Extractor:
         self.extract_invoke()
 
     # 创建相应tmp目录存储生成的缓存文件
-    def __create_tmp_dirs(self):
+    def create_tmp_dirs(self):
         print (TAG.join('create tmp dirs in'))
         file_name = os.path.basename(self.jar_path)
         jar_name = os.path.splitext(file_name)[0]
@@ -74,7 +75,7 @@ class Extractor:
                         package = string.splitfields(line.strip(';'), ' ')[1]
                         if 'android' in package:
                             module = string.splitfields(package, '.')[-1]
-                            if module != '*':
+                            if module != '*' and module not in self.ignore_list:
                                 file_key = os.path.join(root, f)
                                 module_list = self.android_modules.get(file_key) or []
                                 module_list.append(module)
@@ -131,5 +132,8 @@ class Extractor:
         config_path = os.path.join(self.tool_path, 'ignore.cfg')
         for line in open(config_path):
             if line:
-                print line
+                line = line.strip('\n')
+                if line[-2:-1] == ',':
+                    line = line[:-2]
+                self.ignore_list.append(line)
         pass
