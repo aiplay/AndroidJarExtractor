@@ -86,7 +86,7 @@ class Extractor:
     def extract_method(self):
         self.method_collection = dict()
         for file_path, module_list in self.android_modules.items():
-            # if os.path.basename(file_path) == 'a.java':
+            # if os.path.basename(file_path) == 'AuthActivity.java':
             method_extractor = MethodExtractor(file_path)
             method_extractor.extract(module_list)
             self.method_collection[file_path] = method_extractor
@@ -131,9 +131,11 @@ class Extractor:
     def read_ignore_config(self):
         config_path = os.path.join(self.tool_path, 'ignore.cfg')
         for line in open(config_path):
+            line = line.strip(' ');
+            line = line.strip('\n')
             if line:
-                line = line.strip('\n')
-                if line[-2:-1] == ',':
-                    line = line[:-2]
+                if line[len(line)-1] == ',':
+                    line = line[:-1]
                 self.ignore_list.append(line)
         pass
+        print self.ignore_list

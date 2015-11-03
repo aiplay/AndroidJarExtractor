@@ -38,7 +38,6 @@ class InvokeExtractor:
             index = line.find(module)
             if index != -1:
                 if index == 0 or line[index-1] in ['', ' ', ',', '(']:
-                # if index == 0 or line[index-1] != ' ':
                     start = index + len(module)
                     if line[start] != ' ':
                         continue
