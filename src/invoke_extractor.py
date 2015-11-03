@@ -17,7 +17,8 @@ class InvokeExtractor:
         self.static_invoke_list = list()
         for method in method_list:
             for line in method:
-                if module + '.' in line:
+                index = line.find(module)
+                if index > 0 and line[index-1] in [' ', ',', '(']:
                     self.static_invoke_list.append(line)
 
     def get_obj_invoke(self, module, method_list):
